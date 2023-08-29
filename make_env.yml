@@ -1,0 +1,27 @@
+name: bmovietools
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - ipython
+  - notebook
+  - pip
+  - pandas
+  - numpy
+  - scipy
+  - matplotlib
+  - seaborn
+  - pymatreader
+  - h5io
+  - hdf5
+  - pynwb
+  - nibabel
+  - nilearn
+  - mne-base
+  - dandi
+  - datalad
+  - pip:
+    - nwbinspector
+    - templateflow
+    - pycortex
