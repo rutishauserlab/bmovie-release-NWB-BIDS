@@ -171,8 +171,8 @@ def plot_cellraster(spiketimes, binsize, window=[-1,1], window2=None, cut_line=N
             ax2.plot(tbin_center, psth[ii]['mean'], '.-',
                      color='#676767', lw=1.1, markersize=3)
             
-    ax2.set_xlabel('Time (s)', fontsize=7, labelpad=1.5)
-    ax2.set_ylabel('Firing rate (Hz)', fontsize=7, labelpad=1.5)
+    ax2.set_xlabel('Time (s)', fontsize=8, labelpad=1.5)
+    ax2.set_ylabel('Firing rate (Hz)', fontsize=8, labelpad=1.5)
     
     if ylim is not None:
         ax2.set_ylim(ylim)

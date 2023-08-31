@@ -18,6 +18,7 @@ dependencies:
   - pynwb
   - nibabel
   - nilearn
+  - resampy
   - mne-base
   - dandi
   - datalad

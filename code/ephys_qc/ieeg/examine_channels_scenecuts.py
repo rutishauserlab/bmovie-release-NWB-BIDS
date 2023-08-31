@@ -318,7 +318,7 @@ def main(nwb_input_dir, lfp_process_dir, scenecuts_file):
             psth_mat = get_psth([lfp_change_resp_sp, lfp_cont_resp_sp], binsize=binsize)
                 
             plot_psth(psth_mat, tbins, binsize, 
-                      window=[-0.5,1.0], window2=None, figsize=(1.5,1.5),
+                      window=[-0.5,1.0], window2=None, figsize=(1.5,1.2),
                       legends = ['scene change','continuity cut'], 
                       fig_title=f'{ch_ii.session_id}-{ch_ii.id} \n {cii[0]:.3f}, {cii[1]:.3f}',
                       save_loc = os.path.join(output_dir, f'scenecut_{ch_type}_{ch_ii.session_id}_{ch_ii.id}.png'),

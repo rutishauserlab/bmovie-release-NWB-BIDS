@@ -328,7 +328,7 @@ def main(nwb_input_dir, lfp_process_dir):
             psth_mat = get_psth([lfp_newresp_sp, lfp_oldresp_sp], binsize=binsize)
             
             plot_psth(psth_mat, tbins, binsize, 
-                      window=[-1.0,2.0], window2=None, figsize=(2,1.5),
+                      window=[-1.0,2.0], window2=None, figsize=(2,1.2),
                       legends = ['novel', 'familiar'], 
                       fig_title=f'{ch_ii.session_id}-{ch_ii.id} \n {cii[0]:.3f}, {cii[1]:.3f}',
                       save_loc = os.path.join(output_dir,f'recognition_{ch_type}_{ch_ii.session_id}_{ch_ii.id}.png'),

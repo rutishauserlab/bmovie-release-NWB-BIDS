@@ -156,7 +156,7 @@ if __name__ == '__main__':
     parser.add_argument('--lfp_process_dir', type=str, required=True, help='Directory for saving preprocessed HFB signals.')
     
     args = parser.parse_args()
-    main(args.nwb_input_dir)
+    main(args.nwb_input_dir, args.lfp_process_dir)
     
     
 '''

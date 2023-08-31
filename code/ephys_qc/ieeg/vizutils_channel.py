@@ -133,8 +133,8 @@ def plot_psth(psth, t_trace, binsize, window=[-1,1], window2=None, figsize=(2,1.
                      color=colors[ii % len(colors)], lw=1.1, markersize=3)
         
 
-    ax.set_xlabel('Time (s)', fontsize=7, labelpad=1.5)
-    ax.set_ylabel('Mean HFB response\n(z-scored)', fontsize=7, labelpad=1.5)
+    ax.set_xlabel('Time (s)', fontsize=8, labelpad=1.5)
+    ax.set_ylabel('Mean HFB response\n(z-scored)', fontsize=8, labelpad=1.5)
     
     ax.set_xticks(xtics_loc)
     ax.set_xticklabels(xtics,fontsize=8)
@@ -158,7 +158,7 @@ def plot_psth(psth, t_trace, binsize, window=[-1,1], window2=None, figsize=(2,1.
     
     # ax.margins(x=0.0, y=None)
     if legends:
-        ax.legend(frameon=False, fontsize=7, handlelength=1., handletextpad=0.5,
+        ax.legend(frameon=False, fontsize=6, handlelength=1., handletextpad=0.5,
                    columnspacing=1.0, borderaxespad=0.5, labelspacing=0.15)
         
     plt.subplots_adjust(hspace=0.1)
