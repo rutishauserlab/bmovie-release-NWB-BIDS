@@ -9,8 +9,9 @@ Assess and plot eye tracking data quality recorded during the EMU sessions
 import os
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
 from pynwb import NWBHDF5IO
+from tqdm import tqdm
+from glob import glob
 
 from ephys_utills import get_et_timebins, compute_pixelperDVA, et_heatmap
 
@@ -36,22 +37,21 @@ def main(nwb_input_dir):
     
     nbins = np.round(frame_duration_msec * nframes / timebin_msec).astype(int)
 
-    # Extract session IDs from NWB files
-    session_ids = [ f for f in sorted(os.listdir(nwb_input_dir)) if f.endswith('.nwb') ]
-    session_ids_et = [ os.path.splitext(ses_ii)[0] for ses_ii in session_ids ] 
+    nwb_session_files = sorted(glob(os.path.join(nwb_input_dir, 'sub-*/*.nwb')))
     
     # ----- Read ET (gaze) data from the NWB files -----
     etdata_ses = []
     pixel_dva_ses = []
     missingdata_ratio = []
-    for session_ii in session_ids:
-        
-        print(f'processing {session_ii}...')
-        filepath = os.path.join(nwb_input_dir,session_ii)
-        
+    session_ids_et = []
+    for session_ii in nwb_session_files:
+        print(f'processing {os.path.basename(session_ii)}...')
+
         # Open the NWB file and read its content
-        with NWBHDF5IO(filepath,'r') as nwb_io: 
+        with NWBHDF5IO(session_ii,'r') as nwb_io: 
             nwbfile = nwb_io.read()
+            
+            session_ids_et.append(nwbfile.identifier)
             
             trials_df = nwbfile.trials.to_dataframe()
             enc_start_time = trials_df[trials_df['stim_phase']=='encoding']['start_time'].values[0]
@@ -110,10 +110,11 @@ def main(nwb_input_dir):
     
     # --- data to be used for ET analysis ---
     session_ids_et = np.asarray(session_ids_et)
-    etdata_ses = np.asarray(etdata_ses, dtype=object)
-    pixel_dva_ses = np.asarray(pixel_dva_ses)
-    missingdata_ratio = np.asarray(missingdata_ratio)
-    
+    re_idx = np.argsort(session_ids_et) # resort subject IDs, all in _r1, _r2 order
+    session_ids_et = session_ids_et[re_idx]
+    etdata_ses = np.asarray(etdata_ses, dtype=object)[re_idx,:]
+    pixel_dva_ses = np.asarray(pixel_dva_ses)[re_idx]
+    missingdata_ratio = np.asarray(missingdata_ratio)[re_idx]
     
     # ----- Compute heatmap correlations between subjects -----
     sigma = np.mean(pixel_dva_ses) # Standard deviation for Gaussian kernel. Equal for both axes.
@@ -218,11 +219,9 @@ def main(nwb_input_dir):
     ax.set_xticklabels(session_ids_et_txt, fontsize=7, rotation=80, ha='center')
     ax.tick_params(axis='x', which='major', length=3, pad=0)
     
-    
     plt.tight_layout()
     fig.savefig("gaze_group_mean-hmap.png", dpi=600, bbox_inches='tight')
     fig.savefig("gaze_group_mean-hmap.svg", format='svg', dpi=600, bbox_inches='tight')
-
 
 
 if __name__ == '__main__':
@@ -237,10 +236,6 @@ if __name__ == '__main__':
 python gen_figure3_eyetracking.py --nwb_input_dir /path/to/nwb_files/
 
 e.g.:
-python gen_figure3_eyetracking.py --nwb_input_dir /media/umit/easystore/bmovie_NWBfiles
+python gen_figure3_eyetracking.py --nwb_input_dir /media/umit/easystore/bmovie_dandi/000623
 
 '''
-    
-
-
-

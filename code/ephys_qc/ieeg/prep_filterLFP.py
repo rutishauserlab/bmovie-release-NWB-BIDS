@@ -9,6 +9,8 @@ obtain the high-frequency broadband (HFB) time-course per channel.
 
 import os
 import numpy as np
+from glob import glob
+
 from pynwb import NWBHDF5IO
 
 import mne
@@ -22,7 +24,7 @@ keep_channel_areas = [ 'AMY', 'HIP', 'ACC', 'SMA', 'OFC' ]
 
 def main(nwb_input_dir, lfp_process_dir):
     
-    session_ids = [ f for f in sorted(os.listdir(nwb_input_dir)) if f.endswith('.nwb') ]
+    nwb_session_files = sorted(glob(os.path.join(nwb_input_dir, 'sub-*/*.nwb')))
     
     os.makedirs(lfp_process_dir, exist_ok=True)
 
@@ -42,14 +44,13 @@ def main(nwb_input_dir, lfp_process_dir):
     
         etype = data2load.split('_')[1]
         
-        for session_ii in session_ids:
+        for session_ii in nwb_session_files:
+            print(f'processing {os.path.basename(session_ii)}...')
         
-            print(f'\nprocessing {session_ii}...')
-        
-            filepath = os.path.join(nwb_input_dir,session_ii)
-            with NWBHDF5IO(filepath,'r') as nwb_io: 
+            with NWBHDF5IO(session_ii,'r') as nwb_io: 
                 nwbfile = nwb_io.read()
-        
+                session_id = nwbfile.identifier
+                
                 # load info about movie watching and new/old task time blocks.
                 trials_df = nwbfile.trials.to_dataframe()
                 recog_trials_df = trials_df.loc[trials_df.stim_phase=='recognition']
@@ -102,7 +103,7 @@ def main(nwb_input_dir, lfp_process_dir):
             for task_ii, task_start, task_stop in [('enc', enc_start_time, enc_stop_time),
                                                    ('recog', recog_start_time, recog_stop_time) ]:
                 
-                print(f'\nprocessing {task_ii} for {session_ii}...')
+                print(f'\nprocessing {task_ii} for {session_id}...')
             
                 time_inds = np.logical_and(lfp_time>=task_start, lfp_time<=task_stop)
                 
@@ -128,7 +129,7 @@ def main(nwb_input_dir, lfp_process_dir):
                     print(f'\ncomputing {bp}...')
                     
                     fname_bp = os.path.join(lfp_process_dir,
-                                    f'{os.path.splitext(session_ii)[0]}_{task_ii}_{etype}_{bp}.fif')
+                                    f'{os.path.splitext(session_id)[0]}_{task_ii}_{etype}_{bp}.fif')
             
                     # apply Morlet filters
                     power = mne.time_frequency.tfr_array_morlet(np.expand_dims(raw.copy()._data, 0), # (n_epochs, n_channels, n_times)
@@ -163,7 +164,7 @@ if __name__ == '__main__':
 python prep_filterLFP.py --nwb_input_dir /path/to/nwb_files/ --lfp_process_dir /path/to/lfp_prep_dir
 
 e.g.:
-python prep_filterLFP.py --nwb_input_dir /media/umit/easystore/bmovie_NWBfiles --lfp_process_dir /media/umit/easystore/lfp_prep
+python prep_filterLFP.py --nwb_input_dir /media/umit/easystore/bmovie_dandi/000623 --lfp_process_dir /media/umit/easystore/lfp_prep
 
 '''
 

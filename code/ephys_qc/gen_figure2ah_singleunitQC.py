@@ -12,6 +12,7 @@ import numpy as np
 from pynwb import NWBHDF5IO
 from ephys_utills import get_color
 import matplotlib.pyplot as plt
+from glob import glob
 import argparse
 
 # Set SVG font type for Matplotlib
@@ -20,9 +21,8 @@ plt.rcParams['svg.fonttype'] = 'none'
 
 def main(nwb_input_dir):
     
-    # Extract session IDs from NWB files
-    session_ids = [ f for f in sorted(os.listdir(nwb_input_dir)) if f.endswith('.nwb') ]
-    
+    nwb_session_files = sorted(glob(os.path.join(nwb_input_dir, 'sub-*/*.nwb')))
+
     # Initialize lists to hold various data
     n_units_per_wire = []
     firing_rate = []
@@ -36,14 +36,11 @@ def main(nwb_input_dir):
     cell_brainareas_lr = []
     
     # Loop through each NWB file
-    for session_ii in session_ids:
-        
-        print(f'processing {session_ii}...')
+    for session_ii in nwb_session_files:
+        print(f'processing {os.path.basename(session_ii)}...')
     
-        filepath = os.path.join(nwb_input_dir,session_ii)
-        
         # Open the NWB file and read its content
-        with NWBHDF5IO(filepath,'r') as nwb_io: 
+        with NWBHDF5IO(session_ii,'r') as nwb_io: 
             nwbfile = nwb_io.read()
         
             # Extract trial information and encoding times
@@ -96,7 +93,6 @@ def main(nwb_input_dir):
                     cell_brainareas_lr.append(b_area_init.removeprefix('Right ')+' right')         
     
         
-    
     # --- Plotting QC figures based on above data across electrodes and session ---
     fcol = '#009cccff'
     
@@ -224,10 +220,8 @@ def main(nwb_input_dir):
               # bbox_to_anchor=(1, 0, 0.5, 1),
               )
     
-    
     plt.savefig('SU_qc.png', dpi=300)
     plt.savefig('SU_qc.svg', format='svg')
-
 
 
 if __name__ == '__main__':
@@ -242,12 +236,6 @@ if __name__ == '__main__':
 python gen_figure2ah_singleunitQC.py --nwb_input_dir /path/to/nwb_files/
 
 e.g.:
-python gen_figure2ah_singleunitQC.py --nwb_input_dir /media/umit/easystore/bmovie_NWBfiles
+python gen_figure2ah_singleunitQC.py --nwb_input_dir /media/umit/easystore/bmovie_dandi/000623
 
 '''
-    
-    
-    
-    
-    
-    

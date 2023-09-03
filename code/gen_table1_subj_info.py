@@ -15,23 +15,26 @@ from pynwb import NWBHDF5IO
 import argparse
 
 
-def main(nwb_input_dir, mri_datadir):
+# Function to extract subject IDs from MRI directory
+def get_subjects(main_datadir):
+    fns = sorted(glob(os.path.join(main_datadir, 'sub-*/')))
+    fns = [fn.split('/')[-2] for fn in fns]
+    return fns
+
+
+def main(nwb_input_dir, bids_datadir):
     
-    # Extract session IDs from NWB files
-    session_ids = [ f for f in sorted(os.listdir(nwb_input_dir)) if f.endswith('.nwb') ]
-    
+    nwb_session_files = sorted(glob(os.path.join(nwb_input_dir, 'sub-*/*.nwb')))
+
     # Create an empty DataFrame to store session details
     session_df = pd.DataFrame(columns=['# of SU\nruns', '# of fMRI\nruns', 
                                        'Age', 'Sex', 'Epilepsy Diagnosis' ])
     
     # Process each NWB file and extract relevant information
-    for session_ii in session_ids:
+    for session_ii in nwb_session_files:
         
-        print(f'processing {session_ii}...')
-        filepath = os.path.join(nwb_input_dir,session_ii)
-        
-        with NWBHDF5IO(filepath,'r') as nwb_io: 
-            
+        print(f'processing {os.path.basename(session_ii)}...')
+        with NWBHDF5IO(nwb_session_files,'r') as nwb_io: 
             # Read the NWB file
             nwbfile = nwb_io.read()
             
@@ -52,14 +55,8 @@ def main(nwb_input_dir, mri_datadir):
             session_df.loc[ses_id, 'Epilepsy Diagnosis'] = nwbfile.subject.description.removeprefix('epilepsy diagnosis: ')
             
     
-    # Function to extract subject IDs from MRI directory
-    def get_subjects(main_datadir):
-        fns = sorted(glob(os.path.join(main_datadir, 'sub-*/')))
-        fns = [fn.split('/')[-2] for fn in fns]
-        return fns
-    
     # Get list of subjects from MRI data directory
-    subjects = get_subjects(mri_datadir)
+    subjects = get_subjects(bids_datadir)
     subjects = [ sii.removeprefix('sub-').upper() for sii in subjects ]
     
     # For each subject from MRI directory, check if they exist in the session DataFrame
@@ -121,18 +118,18 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(description='Read NWB files and MRI BIDS file names to generate Table 1')
     parser.add_argument('--nwb_input_dir', type=str, required=True, help='Directory containing NWB files.')
-    parser.add_argument('--mri_datadir', type=str, required=True, help='Directory containing BIDS files.')
+    parser.add_argument('--bids_datadir', type=str, required=True, help='Directory containing BIDS files.')
 
     args = parser.parse_args()
 
-    main(args.nwb_input_dir, args.mri_datadir)
+    main(args.nwb_input_dir, args.bids_datadir)
     
     
 '''
 run using:
-python gen_table1_subj_info.py --nwb_input_dir /path/to/nwb_files/ --mri_datadir /path/to/bids_files/
+python gen_table1_subj_info.py --nwb_input_dir /path/to/nwb_files/ --bids_datadir /path/to/bids_files/
 
 e.g.: 
-python gen_table1_subj_info.py --nwb_input_dir /media/umit/easystore/bmovie_NWBfiles --mri_datadir /media/umit/easystore/BangU01
+python gen_table1_subj_info.py --nwb_input_dir /media/umit/easystore/bmovie_dandi/000623 --bids_datadir /media/umit/easystore/BangU01
     
 '''

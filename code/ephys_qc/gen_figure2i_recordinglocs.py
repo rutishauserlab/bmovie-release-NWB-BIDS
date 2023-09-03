@@ -10,6 +10,7 @@ import os
 import numpy as np
 from pynwb import NWBHDF5IO
 import matplotlib.pyplot as plt
+from glob import glob
 
 import nibabel as nib
 import templateflow.api as tflow
@@ -25,8 +26,7 @@ plt.rcParams['svg.fonttype'] = 'none'
 
 def main(nwb_input_dir):
 
-    # Extract session IDs from NWB files
-    session_ids = [ f for f in sorted(os.listdir(nwb_input_dir)) if f.endswith('.nwb') ]
+    nwb_session_files = sorted(glob(os.path.join(nwb_input_dir, 'sub-*/*.nwb')))
     
     # Initialize empty lists to store brain locations and MNI coordinates
     micros_brainlocs = []
@@ -36,13 +36,11 @@ def main(nwb_input_dir):
     micros_mnilocs_xyz_uq = []
     
     # Loop over all session files to extract electrode data
-    for session_ii in session_ids:
-        
-        print(f'processing {session_ii}...')
-        filepath = os.path.join(nwb_input_dir,session_ii)
-        
+    for session_ii in nwb_session_files:
+        print(f'processing {os.path.basename(session_ii)}...')
+
         # Open the NWB file and read its content
-        with NWBHDF5IO(filepath,'r') as nwb_io: 
+        with NWBHDF5IO(session_ii,'r') as nwb_io: 
             nwbfile = nwb_io.read()
             
             # get information about electrodes
@@ -76,10 +74,7 @@ def main(nwb_input_dir):
     
     
     # ----- Plot electrode locations -----
-    for prii in zip(*np.unique(micros_brainlocs, return_counts=True)):
-        print(prii)
-    
-    # ----- plot only the unique locations per subject -----
+    # plot only the unique locations per subject -----
     blocs = np.unique(micros_brainlocs)
     
     blocs_uq = []
@@ -95,7 +90,6 @@ def main(nwb_input_dir):
     micros_brainlocs_uq = np.asarray(micros_brainlocs_uq)
     micros_mnilocs_xyz_uq = np.asarray(micros_mnilocs_xyz_uq)
     nonzero_xzy_locs = abs(micros_mnilocs_xyz_uq).sum(1) != 0
-    
     
     # MNI152NLin2009cAsym
     mask_ref_file = tflow.get("MNI152NLin2009cAsym", desc="brain", resolution=1,
@@ -120,23 +114,6 @@ def main(nwb_input_dir):
                   'vmp':(5,-15),
                   'pre':(5,45)
                   }
-    
-    '''
-    see https://nipy.org/nibabel/coordinate_systems.html
-    ----- the MNI reference space -----
-    - The origin (0, 0, 0) point is defined to be the point that the anterior 
-    commissure of the MNI template brain crosses the midline (the AC point).
-    - Axis units are millimeters.
-    - The Y axis follows the midline of the MNI brain between the left and right 
-    hemispheres, going from posterior (negative) to anterior (positive), 
-    passing through the AC point. The template defines this line.
-    - The Z axis is at right angles to the Y axis, going from inferior (negative) 
-    to superior (positive), with the superior part of the line passing between 
-    the two hemispheres.
-    - The X axis is a line going from the left side of the brain (negative) to 
-    right side of the brain (positive), passing through the AC point, 
-    and at right angles to the Y and Z axes.
-    '''
     
     fig, axs = plt.subplots(nrows=2, ncols=5, figsize=(6.5,3), constrained_layout=False )
     
@@ -183,7 +160,6 @@ def main(nwb_input_dir):
                 bbox_inches='tight', pad_inches=0.05)
     
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Load NWB files to visualize recording locations in 2D.")
     parser.add_argument('--nwb_input_dir', type=str, required=True, help='Directory containing NWB files.')
@@ -196,6 +172,6 @@ if __name__ == '__main__':
 python gen_figure2i_recordinglocs.py --nwb_input_dir /path/to/nwb_files/
 
 e.g.:
-python gen_figure2i_recordinglocs.py --nwb_input_dir /media/umit/easystore/bmovie_NWBfiles
+python gen_figure2i_recordinglocs.py --nwb_input_dir /media/umit/easystore/bmovie_dandi/000623
 
 '''

@@ -10,6 +10,8 @@ and plot Figure 6 a, b.
 import os
 import numpy as np
 from tqdm import tqdm
+from glob import glob
+
 from pynwb import NWBHDF5IO
 import argparse
 
@@ -93,8 +95,8 @@ class Event:
 
 def main(nwb_input_dir):
     
-    session_ids = [ f for f in sorted(os.listdir(nwb_input_dir)) if f.endswith('.nwb') ]
-    
+    nwb_session_files = sorted(glob(os.path.join(nwb_input_dir, 'sub-*/*.nwb')))
+
     offset_pre = 1.
     offset_post = 2.
         
@@ -104,13 +106,11 @@ def main(nwb_input_dir):
     keep_cells_areas = []
     
     cnt_cells_tot = 0
-    for session_ii in session_ids:
-        
-        print(f'processing {session_ii}...')
-        filepath = os.path.join(nwb_input_dir,session_ii)
+    for session_ii in nwb_session_files:
+        print(f'processing {os.path.basename(session_ii)}...')
         
         # hdf file associated with nwbfile --- 
-        with NWBHDF5IO(filepath,'r') as nwb_io: 
+        with NWBHDF5IO(session_ii,'r') as nwb_io: 
             nwbfile = nwb_io.read()
         
             trials_df = nwbfile.trials.to_dataframe()
@@ -221,7 +221,6 @@ def main(nwb_input_dir):
     cells_newold_info_n = np.nan_to_num(cells_newold_info, nan=0)
     cells_newold_info_n = cells_newold_info_n.astype(bool)
     
-    
     # --- Perform permutation test results to assess the area-based p-values ---
     areas = ['ACC', 'amygdala', 'hippocampus', 'preSMA', 'vmPFC']
     
@@ -261,7 +260,6 @@ def main(nwb_input_dir):
                         save_fname=os.path.join(output_dir,f'recognition_{cell_ii.id}.png') )
         
         plt.close('all')
-        
     
 
 if __name__ == '__main__':
@@ -276,8 +274,6 @@ if __name__ == '__main__':
 python examine_neurons_recognitiontask.py --nwb_input_dir /path/to/nwb_files/ 
 
 e.g.:
-python examine_neurons_recognitiontask.py --nwb_input_dir /media/umit/easystore/bmovie_NWBfiles
+python examine_neurons_recognitiontask.py --nwb_input_dir /media/umit/easystore/bmovie_dandi/000623
 
 '''
-
-

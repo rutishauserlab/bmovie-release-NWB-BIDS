@@ -11,6 +11,7 @@ https://github.com/rutishauserlab/recogmem-release-NWB/tree/master/RutishauserLa
 
 import os
 import numpy as np
+from glob import glob
 
 from pynwb import NWBHDF5IO
 from ephys_utills import cal_d_prime, cal_auc, check_inclusion, dynamic_split
@@ -23,23 +24,20 @@ plt.rcParams['svg.fonttype'] = 'none'
 
 def main(nwb_input_dir):
     
-    # Extract session IDs from NWB files
-    session_ids = [ f for f in sorted(os.listdir(nwb_input_dir)) if f.endswith('.nwb') ]
-    
+    nwb_session_files = sorted(glob(os.path.join(nwb_input_dir, 'sub-*/*.nwb')))
+
     aucAll = []
-    stats_all_X = np.zeros((len(session_ids), 7))
-    stats_all_Y = np.zeros((len(session_ids), 7))
+    stats_all_X = np.zeros((len(nwb_session_files), 7))
+    stats_all_Y = np.zeros((len(nwb_session_files), 7))
     accuracies_high = []
     accuracies_low = []
     
     index = 0
-    for session_ii in session_ids:
-        
-        print(f'processing {session_ii}...')
-        filepath = os.path.join(nwb_input_dir,session_ii)
-        
+    for session_ii in nwb_session_files:
+        print(f'processing {os.path.basename(session_ii)}...')
+
         # Open the NWB file and read its content
-        with NWBHDF5IO(filepath,'r') as nwb_io:
+        with NWBHDF5IO(session_ii,'r') as nwb_io:
             nwbfile = nwb_io.read()
     
             trials_df = nwbfile.trials.to_dataframe()
@@ -62,7 +60,6 @@ def main(nwb_input_dir):
             actual_resp_new0_old1_altv = np.array(actual_resp_new0_old1_altv).astype(int) 
             assert np.array_equal(actual_resp_new0_old1,actual_resp_new0_old1_altv)
             # --- o ---
-        
         
         response_recog = actual_resp_button
         new_old_labels = recog_new0_old1 # ground_truth
@@ -217,7 +214,6 @@ if __name__ == '__main__':
 python gen_figure3_recogtask_roc.py --nwb_input_dir /path/to/nwb_files/
 
 e.g.:
-python gen_figure3_recogtask_roc.py --nwb_input_dir /media/umit/easystore/bmovie_NWBfiles
+python gen_figure3_recogtask_roc.py --nwb_input_dir /media/umit/easystore/bmovie_dandi/000623
 
 '''   
-    

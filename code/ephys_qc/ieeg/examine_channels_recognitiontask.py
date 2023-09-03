@@ -94,8 +94,7 @@ class EventCh:
 
 def main(nwb_input_dir, lfp_process_dir):
     
-    session_ids = [ f for f in sorted(os.listdir(nwb_input_dir)) if f.endswith('.nwb') ]
-    session_names = [ os.path.splitext(f)[0] for f in session_ids ] 
+    nwb_session_files = sorted(glob(os.path.join(nwb_input_dir, 'sub-*/*.nwb')))
     
     for ch_type in ['macro', 'micro']:
         
@@ -117,16 +116,13 @@ def main(nwb_input_dir, lfp_process_dir):
         all_chs_newold = []
         
         cnt_chs_tot = 0
-        for sii, session_ii in enumerate(session_names):
-        
-            print(f'processing {session_ii}...')
-            filepath = os.path.join(nwb_input_dir,session_ii+'.nwb')
+        for sii, session_ii in enumerate(nwb_session_files):
+            print(f'processing {os.path.basename(session_ii)}...')
             
-            # hdf file associated with nwbfile --- 
-            with NWBHDF5IO(filepath,'r') as nwb_io: 
-                # read the file
+            with NWBHDF5IO(session_ii,'r') as nwb_io: 
                 nwbfile = nwb_io.read()
-        
+                session_id = nwbfile.identifier
+                
                 # load info about movie watching and new/old task time blocks.
                 trials_df = nwbfile.trials.to_dataframe()
         
@@ -139,10 +135,10 @@ def main(nwb_input_dir, lfp_process_dir):
                     - recog_start_time 
             
             
-            lfp_file = glob(os.path.join(lfp_process_dir, f'{session_ii}*{task2load}*{ch_type}*{band2load}*'))
+            lfp_file = glob(os.path.join(lfp_process_dir, f'{session_id}*{task2load}*{ch_type}*{band2load}*'))
             
             if len(lfp_file) == 0:
-                print(f'skipped {session_ii}')
+                print(f'skipped {session_id}')
                 continue
             
             assert len(lfp_file) <= 1
@@ -199,7 +195,7 @@ def main(nwb_input_dir, lfp_process_dir):
                     break # to skip this session
                     
                 this_ch = Channel()
-                this_ch.session_id = session_ii
+                this_ch.session_id = session_id
                 this_ch.id = ch_name_ii
                 this_ch.brainarea = ch_name_ii[1:-1]
                 this_ch.newold_recog = newold_events
@@ -351,6 +347,6 @@ if __name__ == '__main__':
 python examine_channels_recognitiontask.py --nwb_input_dir /path/to/nwb_files/ --lfp_process_dir /path/to/lfp_prep
 
 e.g.:
-python examine_channels_recognitiontask.py --nwb_input_dir /media/umit/easystore/bmovie_NWBfiles --lfp_process_dir /media/umit/easystore/lfp_prep
+python examine_channels_recognitiontask.py --nwb_input_dir /media/umit/easystore/bmovie_dandi/000623 --lfp_process_dir /media/umit/easystore/lfp_prep
 
 '''

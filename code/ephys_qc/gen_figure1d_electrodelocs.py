@@ -11,6 +11,7 @@ import os
 import numpy as np
 from pynwb import NWBHDF5IO
 import matplotlib.pyplot as plt
+from glob import glob
 import mne
 
 from ephys_utills import get_color
@@ -36,30 +37,17 @@ brain_abbv_map_r = {v: k for k, v in brain_abbv_map.items()}
 
 def main(nwb_input_dir):
     
-    # Extract session IDs from NWB files
-    session_ids = [ f for f in sorted(os.listdir(nwb_input_dir)) if f.endswith('.nwb') ]
+    nwb_session_files = sorted(glob(os.path.join(nwb_input_dir, 'sub-*/*.nwb')))
     
     # Loop over all session files to extract electrode data
     macros_brainlocs = []
     macros_mnilocs_xyz = []
     keep_ids = []
-    for session_ii in session_ids:
-        
-        print(f'processing {session_ii}...')
-        
-        # Extract subject ID from the file name
-        subj_id = session_ii.split('_')[0]
-        if subj_id == 'P53CS':
-            if subj_id+'A' in keep_ids:
-                subj_id = subj_id+'B'
-            else:
-                subj_id = subj_id+'A'
-        keep_ids.append(subj_id)
-        
-        filepath = os.path.join(nwb_input_dir,session_ii)
+    for session_ii in nwb_session_files:
+        print(f'processing {os.path.basename(session_ii)}...')
         
         # Reading NWB file
-        with NWBHDF5IO(filepath,'r') as nwb_io: 
+        with NWBHDF5IO(session_ii,'r') as nwb_io: 
             nwbfile = nwb_io.read()
         
             # Extract electrode data from the NWB file
@@ -72,6 +60,16 @@ def main(nwb_input_dir):
             electrodes_df_use = electrodes_df[use_chans].copy()
             brainarea = electrodes_df_use['location'].values
             xyz_coords = electrodes_df_use[['x','y','z']].values
+        
+            # Extract subject ID from the file
+            subj_id = nwbfile.identifier.split('_')[0]
+            
+            if subj_id == 'P53CS':
+                if subj_id+'A' in keep_ids:
+                    subj_id = subj_id+'B'
+                else:
+                    subj_id = subj_id+'A'
+            keep_ids.append(subj_id)
         
             # Create abbreviated brain area names with additional details
             brainarea_abbv = [ f'{subj_id}_{brain_abbv_map_r[bii]}_{cii}' for cii, bii in enumerate(brainarea) ]
@@ -140,8 +138,6 @@ if __name__ == '__main__':
 python gen_figure1d_electrodelocs.py --nwb_input_dir /path/to/nwb_files/
 
 e.g.:
-python gen_figure1d_electrodelocs.py --nwb_input_dir /media/umit/easystore/bmovie_NWBfiles
+python gen_figure1d_electrodelocs.py --nwb_input_dir /media/umit/easystore/bmovie_dandi/000623
 
 '''
-    
-    

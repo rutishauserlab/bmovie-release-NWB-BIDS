@@ -10,8 +10,10 @@ and plot Figure 7 a, b.
 import os
 import numpy as np
 import pandas as pd
-from pynwb import NWBHDF5IO
 from tqdm import tqdm
+from glob import glob
+
+from pynwb import NWBHDF5IO
 import argparse
 
 import matplotlib.pyplot as plt
@@ -86,10 +88,9 @@ class Event:
         return frate
     
     
-
 def main(nwb_input_dir, scenecuts_file):
 
-    session_ids = [ f for f in sorted(os.listdir(nwb_input_dir)) if f.endswith('.nwb') ]
+    nwb_session_files = sorted(glob(os.path.join(nwb_input_dir, 'sub-*/*.nwb')))
         
     # --- Load scene cuts info ---
     cuts_df_init = pd.read_csv(scenecuts_file)
@@ -113,13 +114,11 @@ def main(nwb_input_dir, scenecuts_file):
     keep_cells_areas = []
     
     cnt_cells_tot = 0
-    for session_ii in session_ids:
-        
-        print(f'processing {session_ii}...')
-        filepath = os.path.join(nwb_input_dir,session_ii)
+    for session_ii in nwb_session_files:
+        print(f'processing {os.path.basename(session_ii)}...')
         
         # hdf file associated with nwbfile --- 
-        with NWBHDF5IO(filepath,'r') as nwb_io: 
+        with NWBHDF5IO(session_ii,'r') as nwb_io: 
             nwbfile = nwb_io.read()
         
             # scene cut times
@@ -222,8 +221,7 @@ def main(nwb_input_dir, scenecuts_file):
     cells_info_n = np.nan_to_num(cells_info, nan=0)
     cells_info_n = cells_info_n.astype(bool)
     
-    
-    # --- Save permutation test results to assess the area-based p-values ---
+    # --- Perform permutation test results to assess the area-based p-values ---
     areas = ['ACC', 'amygdala', 'hippocampus', 'preSMA', 'vmPFC']
     
     area_counts_null_dist = np.zeros((n_null, len(areas)))
@@ -264,7 +262,6 @@ def main(nwb_input_dir, scenecuts_file):
         plt.close('all')
         
         
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Load NWB files to calculate the ratio of event selective neurons.")
     parser.add_argument('--nwb_input_dir', type=str, required=True, help='Directory containing NWB files.')
@@ -278,9 +275,6 @@ if __name__ == '__main__':
 python examine_neurons_scenecuts.py --nwb_input_dir /path/to/nwb_files/ --scenecuts_file /path/to/scenecut_info.csv
 
 e.g.:
-python examine_neurons_scenecuts.py --nwb_input_dir /media/umit/easystore/bmovie_NWBfiles --scenecuts_file scenecut_info.csv
+python examine_neurons_scenecuts.py --nwb_input_dir /media/umit/easystore/bmovie_dandi/000623 --scenecuts_file scenecut_info.csv
 
 '''
-
-
-    

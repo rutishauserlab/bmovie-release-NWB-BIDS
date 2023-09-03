@@ -42,6 +42,12 @@ import matplotlib.pyplot as plt
 plt.rcParams['svg.fonttype'] = 'none'
 
 
+def get_subjects(fmriprep_dir):
+    fns = sorted(glob(os.path.join(fmriprep_dir, 'sub-*/')))
+    fns = [fn.split('/')[-2] for fn in fns]
+    return fns
+
+
 def load_add_idx(sub_fns, sub_idx):
     dfs = []
     for i, fn in enumerate(sub_fns):
@@ -112,11 +118,6 @@ def plot_all_sub_med(df, sids, col):
 def main(fmriprep_dir):
     
     fns = sorted(glob(os.path.join(fmriprep_dir,'*/ses-001/func/*tsv')))
-    
-    def get_subjects(fmriprep_dir):
-        fns = sorted(glob(os.path.join(fmriprep_dir, 'sub-*/')))
-        fns = [fn.split('/')[-2] for fn in fns]
-        return fns
     
     subjects = get_subjects(fmriprep_dir)
     

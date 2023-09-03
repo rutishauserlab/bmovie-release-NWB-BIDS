@@ -89,8 +89,7 @@ class EventCh:
 
 def main(nwb_input_dir, lfp_process_dir, scenecuts_file):
 
-    session_ids = [ f for f in sorted(os.listdir(nwb_input_dir)) if f.endswith('.nwb') ]
-    session_names = [ os.path.splitext(f)[0] for f in session_ids ] 
+    nwb_session_files = sorted(glob(os.path.join(nwb_input_dir, 'sub-*/*.nwb')))
         
     # Load scene cuts info
     cuts_df_init = pd.read_csv('scenecut_info.csv')
@@ -103,7 +102,6 @@ def main(nwb_input_dir, lfp_process_dir, scenecuts_file):
     
     scene_cut_frames = cuts_df['shot_start_fr'].to_numpy(dtype=int)
     # scene_cut_times = cuts_df['shot_start_t'].to_numpy()
-    
     
     for ch_type in ['macro', 'micro']:
     
@@ -125,15 +123,12 @@ def main(nwb_input_dir, lfp_process_dir, scenecuts_file):
         all_chs_scenecut = []
         
         cnt_chs_tot = 0
-        for sii, session_ii in enumerate(session_names):
-        
-            print(f'processing {session_ii}...')
-            filepath = os.path.join(nwb_input_dir,session_ii+'.nwb')
+        for sii, session_ii in enumerate(nwb_session_files):
+            print(f'processing {os.path.basename(session_ii)}...')
             
-            # hdf file associated with nwbfile --- 
-            with NWBHDF5IO(filepath,'r') as nwb_io: 
-                # read the file
+            with NWBHDF5IO(session_ii,'r') as nwb_io: 
                 nwbfile = nwb_io.read()
+                session_id = nwbfile.identifier
         
                 # scene cut times
                 frame_times = np.column_stack((nwbfile.stimulus['movieframe_time'].data[:], 
@@ -141,10 +136,10 @@ def main(nwb_input_dir, lfp_process_dir, scenecuts_file):
                 cut_times_su = frame_times[scene_cut_frames-1,1] # -1 is to pythonize
                 
         
-            lfp_file = glob(os.path.join(lfp_process_dir, f'{session_ii}*{task2load}*{ch_type}*{band2load}*'))
+            lfp_file = glob(os.path.join(lfp_process_dir, f'{session_id}*{task2load}*{ch_type}*{band2load}*'))
             
             if len(lfp_file) == 0:
-                print(f'skipped {session_ii}')
+                print(f'skipped {session_id}')
                 continue
             
             assert len(lfp_file) <= 1
@@ -187,7 +182,7 @@ def main(nwb_input_dir, lfp_process_dir, scenecuts_file):
         
 
                 this_ch = Channel()
-                this_ch.session_id = session_ii
+                this_ch.session_id = session_id
                 this_ch.id = ch_name_ii
                 this_ch.brainarea = ch_name_ii[1:-1]
                 this_ch.scene_changes = scenechange_events
@@ -342,6 +337,6 @@ if __name__ == '__main__':
 python examine_channels_scenecuts.py --nwb_input_dir /path/to/nwb_files/ --lfp_process_dir /path/to/lfp_prep_dir --scenecuts_file /path/to/scenecut_info_file
 
 e.g.:
-python examine_channels_scenecuts.py --nwb_input_dir /media/umit/easystore/bmovie_NWBfiles --lfp_process_dir /media/umit/easystore/lfp_prep --scenecuts_file scenecut_info.csv
+python examine_channels_scenecuts.py --nwb_input_dir /media/umit/easystore/bmovie_dandi/000623 --lfp_process_dir /media/umit/easystore/lfp_prep --scenecuts_file scenecut_info.csv
 
 '''
