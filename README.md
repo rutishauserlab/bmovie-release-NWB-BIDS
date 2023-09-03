@@ -24,7 +24,7 @@ Abstract of the manuscript:
 ### Data Formats
 The dataset is packaged in two standardized data formats: all data recorded while patients were being monitored with depth electrodes is provided in the Neural Data Without Borders (NWB) format, and all fMRI data is provided in the Brain Imaging Data Structure (BIDS) format.
 
-- **NWB Files**: The NWB files are available from the Dandi Archive, under Dandiset #XYZ.
+- **NWB Files**: The NWB files are available from the Dandi Archive, under [Dandiset 000623](https://dandiarchive.org/dandiset/000623).
 
 - **BIDS Files**: The BIDS files are available from the OpenNeuro platform, under OpenNeuro #XYZ. 
 
@@ -57,7 +57,7 @@ For more information on using Anaconda and conda environments, please refer to t
 
 ### Data
 #### NWB Files: 
-NWB-formatted intracranial recordings can be downloaded from the [Dandi Archive, Dandiset #XYZ](TOBEADDED).
+NWB-formatted intracranial recordings can be downloaded from the [Dandi Archive, Dandiset 000623](https://dandiarchive.org/dandiset/000623).
 
 [Dandi command line interface (CLI)](https://pypi.org/project/dandi/) can be used to download the files from Dandi Archive using the commands:
 ```bash
