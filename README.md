@@ -61,7 +61,7 @@ NWB-formatted intracranial recordings can be downloaded from the [Dandi Archive,
 
 [Dandi command line interface (CLI)](https://pypi.org/project/dandi/) can be used to download the files from Dandi Archive using the commands:
 ```bash
-dandi download https://dandiarchive.org/dandiset/[TOBEADDED]
+dandi download DANDI:000623
 ```
 
 #### BIDS Files:
@@ -84,7 +84,7 @@ The input arguments in the scripts below will refer to these directories.
 
 Run the script [`code/gen_table1_subj_info.py`](code/gen_table1_subj_info.py) to generate a table about the number of intracranial recording and fMRI runs performed, and patient demographics and pathology. This script reads the NWB files and BIDS sub-folder names to generate the table:
 ```bash
-python gen_table1_subj_info.py --nwb_input_dir /path/to/nwb_files/ --mri_datadir /path/to/bids_files/
+python gen_table1_subj_info.py --nwb_input_dir /path/to/nwb_files/ --bids_datadir /path/to/bids_files/
 ```
 
 ### Quality assurance analyses for intracranial recordings
@@ -166,7 +166,7 @@ To assess fMRI data quality, voxel-wise temporal signal-to-noise ratio (tSNR) va
 - To compute tSNR values after spatially normalizing participant-specific images to the fsaverage template, run the script [`code/fmri_qc/compute-tsnr-fsaverage.py`](code/fmri_qc/compute-tsnr-fsaverage.py):
     ```bash
     python compute-tsnr-fsaverage.py --fmriprep_dir /path/to/fmriprep_directory/ --output_dir /path/to/tsnr_prep_dir
-    ```
+    ```    
     Then, run the script [`code/fmri_qc/gen_figure4c_tsnr-fsaverage.py`](code/fmri_qc/gen_figure4c_tsnr-fsaverage.py) to load precomputed tSNR values to show on fsaverage template using the [pycortex](https://gallantlab.org/pycortex/) library.
     ```bash
     python gen_figure4c_tsnr-fsaverage.py --tsnr_datadir /path/to/tsnr_prep_dir
