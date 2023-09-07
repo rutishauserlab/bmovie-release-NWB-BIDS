@@ -141,7 +141,7 @@ To examine the ratio of event selective neurons and plot responses from two samp
 ```bash
 python examine_neurons_scenecuts.py --nwb_input_dir /path/to/nwb_files/ --scenecuts_file /path/to/scenecut_info.csv
 ```
-Note that a copy of the CSV file `scenecut_info.csv` containing information about scene cuts in the movie stimuli can be found in the folder [`assets/annotations`](assets/annotations/scenecut_info.csv).
+Note that a copy of the CSV file `scenecut_info.csv` containing information about scene cuts in the movie stimuli can be found in the folder [`assets/annotations`](assets/annotations).
 
 To examine the ratio of event selective channels (from macroelectrodes or microwires) and plot responses from two sample channels, run the script [code/ephys_qc/ieeg/examine_channels_scenecuts.py](code/ephys_qc/ieeg/examine_channels_scenecuts.py):
 ```bash
