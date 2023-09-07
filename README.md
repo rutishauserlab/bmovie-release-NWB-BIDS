@@ -125,26 +125,27 @@ To examine the ratio of memory selective neurons and plot responses from two sam
 python examine_neurons_recognitiontask.py --nwb_input_dir /path/to/nwb_files/ 
 ```
 
-To examine the ratio of memory selective channels (from macroelectrodes or microwires) and plot responses from two sample channels, run the script [code/ephys_qc/ieeg/examine_channels_recognitiontask.py](code/ephys_qc/ieeg/examine_channels_recognitiontask.py):
+Note that data from both microwires and macroelectrodes must undergo preprocessing to obtain the high-frequency broadband (HFB) time-course for each channel. This preprocessing should be completed before running the data quality validation script `examine_channels_recognitiontask.py` below. To perform this preprocessing for both types of electrodes, run the script [code/ephys_qc/ieeg/prep_filterLFP.py](code/ephys_qc/ieeg/prep_filterLFP.py):
+```bash
+python prep_filterLFP.py --nwb_input_dir /path/to/nwb_files/ --lfp_process_dir /path/to/lfp_prep_dir
+```
+
+Then to examine the ratio of memory selective channels (from macroelectrodes or microwires) and plot responses from two sample channels, run the script [code/ephys_qc/ieeg/examine_channels_recognitiontask.py](code/ephys_qc/ieeg/examine_channels_recognitiontask.py):
 ```bash
 python examine_channels_recognitiontask.py --nwb_input_dir /path/to/nwb_files/ --lfp_process_dir /path/to/lfp_prep_dir
 ```
 
-Note that data from both microwires and macroelectrodes must undergo preprocessing to obtain the high-frequency broadband (HFB) time-course for each channel. This preprocessing should be completed before running the data quality validation script `examine_channels_recognitiontask`.py. To perform this preprocessing for both types of electrodes, run the script [code/ephys_qc/ieeg/prep_filterLFP.py](code/ephys_qc/ieeg/prep_filterLFP.py):
-```bash
-python prep_filterLFP.py --nwb_input_dir /path/to/nwb_files/ --lfp_process_dir /path/to/lfp_prep_dir
-```
 
 #### Memory event neurons and channels
 To examine the ratio of event selective neurons and plot responses from two sample neurons, run the script [`code/ephys_qc/singleneuron/examine_neurons_scenecuts.py`](code/ephys_qc/singleneuron/examine_neurons_scenecuts.py):
 ```bash
 python examine_neurons_scenecuts.py --nwb_input_dir /path/to/nwb_files/ --scenecuts_file /path/to/scenecut_info.csv
 ```
-Note that a copy of the CSV file `scenecut_info.csv` containing information about scene cuts in the movie stimuli can be found in the folder [`code/ephys_qc/singleneuron`](code/ephys_qc/singleneuron/).
+Note that a copy of the CSV file `scenecut_info.csv` containing information about scene cuts in the movie stimuli can be found in the folder [`assets/annotations`](assets/annotations/scenecut_info.csv).
 
 To examine the ratio of event selective channels (from macroelectrodes or microwires) and plot responses from two sample channels, run the script [code/ephys_qc/ieeg/examine_channels_scenecuts.py](code/ephys_qc/ieeg/examine_channels_scenecuts.py):
 ```bash
-python examine_channels_scenecuts.py --nwb_input_dir /path/to/nwb_files/ --lfp_process_dir /path/to/lfp_prep_dir --scenecuts_file /path/to/scenecut_info_file
+python examine_channels_scenecuts.py --nwb_input_dir /path/to/nwb_files/ --lfp_process_dir /path/to/lfp_prep_dir --scenecuts_file /path/to/scenecut_info.csv
 ```
 
 ### Quality assurance analyses for fMRI data

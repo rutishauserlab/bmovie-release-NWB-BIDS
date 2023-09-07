@@ -213,7 +213,4 @@ if __name__ == '__main__':
 '''
 python gen_figure3_recogtask_roc.py --nwb_input_dir /path/to/nwb_files/
 
-e.g.:
-python gen_figure3_recogtask_roc.py --nwb_input_dir /media/umit/easystore/bmovie_dandi/000623
-
 '''   

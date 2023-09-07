@@ -134,16 +134,14 @@ def main(nwb_input_dir, lfp_process_dir):
                 recog_trials_df['stop_time'] = recog_trials_df['stop_time'].values \
                     - recog_start_time 
             
+                    
+            lfp_file = os.path.join(lfp_process_dir, f'{session_id}_{task2load}_{ch_type}_{band2load}.fif')
             
-            lfp_file = glob(os.path.join(lfp_process_dir, f'{session_id}*{task2load}*{ch_type}*{band2load}*'))
-            
-            if len(lfp_file) == 0:
-                print(f'skipped {session_id}')
-                continue
-            
-            assert len(lfp_file) <= 1
-            lfp_file = lfp_file[0]
-        
+            if not os.path.isfile(lfp_file):
+                raise SystemExit(f"Cannot find preprocessed file:\n{lfp_file}\n\nPlease make sure"+
+                                 " 'lfp_process_dir' is consistent with output of prep_filterLFP.py script!")
+    
+    
             lfp_mne = mne.io.read_raw_fif(lfp_file, preload=True, verbose='error')
             lfp_data = lfp_mne.get_data()
             lfp_time = lfp_mne.times
@@ -344,9 +342,6 @@ if __name__ == '__main__':
     
 
 '''
-python examine_channels_recognitiontask.py --nwb_input_dir /path/to/nwb_files/ --lfp_process_dir /path/to/lfp_prep
-
-e.g.:
-python examine_channels_recognitiontask.py --nwb_input_dir /media/umit/easystore/bmovie_dandi/000623 --lfp_process_dir /media/umit/easystore/lfp_prep
+python examine_channels_recognitiontask.py --nwb_input_dir /path/to/nwb_files/ --lfp_process_dir /path/to/lfp_prep_dir
 
 '''

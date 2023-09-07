@@ -265,7 +265,7 @@ def main(nwb_input_dir, scenecuts_file):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Load NWB files to calculate the ratio of event selective neurons.")
     parser.add_argument('--nwb_input_dir', type=str, required=True, help='Directory containing NWB files.')
-    parser.add_argument('--scenecuts_file', type=str, required=True, help='Scene cuts annotations file (provided with datasharing).')
+    parser.add_argument('--scenecuts_file', type=str, required=True, help='Scene cuts annotations file (provided in assets/annotations in the code github page).')
     
     args = parser.parse_args()
     main(args.nwb_input_dir, args.scenecuts_file)
@@ -273,8 +273,5 @@ if __name__ == '__main__':
     
 '''
 python examine_neurons_scenecuts.py --nwb_input_dir /path/to/nwb_files/ --scenecuts_file /path/to/scenecut_info.csv
-
-e.g.:
-python examine_neurons_scenecuts.py --nwb_input_dir /media/umit/easystore/bmovie_dandi/000623 --scenecuts_file scenecut_info.csv
 
 '''

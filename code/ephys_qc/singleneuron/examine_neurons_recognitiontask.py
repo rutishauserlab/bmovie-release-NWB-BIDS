@@ -273,7 +273,4 @@ if __name__ == '__main__':
 '''
 python examine_neurons_recognitiontask.py --nwb_input_dir /path/to/nwb_files/ 
 
-e.g.:
-python examine_neurons_recognitiontask.py --nwb_input_dir /media/umit/easystore/bmovie_dandi/000623
-
 '''

@@ -136,15 +136,12 @@ def main(nwb_input_dir, lfp_process_dir, scenecuts_file):
                 cut_times_su = frame_times[scene_cut_frames-1,1] # -1 is to pythonize
                 
         
-            lfp_file = glob(os.path.join(lfp_process_dir, f'{session_id}*{task2load}*{ch_type}*{band2load}*'))
+            lfp_file = os.path.join(lfp_process_dir, f'{session_id}_{task2load}_{ch_type}_{band2load}.fif')
             
-            if len(lfp_file) == 0:
-                print(f'skipped {session_id}')
-                continue
-            
-            assert len(lfp_file) <= 1
-            lfp_file = lfp_file[0]
-        
+            if not os.path.isfile(lfp_file):
+                raise SystemExit(f"Cannot find preprocessed file:\n{lfp_file}\n\nPlease make sure"+
+                                 " 'lfp_process_dir' is consistent with output of prep_filterLFP.py script!")
+    
             lfp_mne = mne.io.read_raw_fif(lfp_file, preload=True, verbose='error')
             lfp_data = lfp_mne.get_data()
             lfp_time = lfp_mne.times
@@ -327,16 +324,13 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Load NWB files and preprocessed HFB signals to calculate the ratio of event selective channels.")
     parser.add_argument('--nwb_input_dir', type=str, required=True, help='Directory containing NWB files.')
     parser.add_argument('--lfp_process_dir', type=str, required=True, help='Directory containing preprocessed HFB signals (by prep_filterLFP.py).')
-    parser.add_argument('--scenecuts_file', type=str, required=True, help='Scene cuts annotations file (provided with datasharing).')
+    parser.add_argument('--scenecuts_file', type=str, required=True, help='Scene cuts annotations file (provided in assets/annotations in the code github page).')
     
     args = parser.parse_args()
     main(args.nwb_input_dir, args.lfp_process_dir, args.scenecuts_file)
     
 
 '''
-python examine_channels_scenecuts.py --nwb_input_dir /path/to/nwb_files/ --lfp_process_dir /path/to/lfp_prep_dir --scenecuts_file /path/to/scenecut_info_file
-
-e.g.:
-python examine_channels_scenecuts.py --nwb_input_dir /media/umit/easystore/bmovie_dandi/000623 --lfp_process_dir /media/umit/easystore/lfp_prep --scenecuts_file scenecut_info.csv
+python examine_channels_scenecuts.py --nwb_input_dir /path/to/nwb_files/ --lfp_process_dir /path/to/lfp_prep_dir --scenecuts_file /path/to/annotations/scenecut_info_file
 
 '''

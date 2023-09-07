@@ -94,7 +94,4 @@ if __name__ == '__main__':
 '''
 python gen_figure5_isc-fsaverage.py --corrs_data_file /path/to/corrs_data_file
 
-e.g.:
-python gen_figure5_isc-fsaverage.py --corrs_data_file /media/umit/easystore/BangU01/iscdata/isc-correlations-all-subjects-fsaverage.npy
-
 '''

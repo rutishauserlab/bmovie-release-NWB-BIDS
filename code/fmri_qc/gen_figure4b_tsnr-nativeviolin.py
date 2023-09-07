@@ -124,7 +124,4 @@ if __name__ == '__main__':
 '''
 python gen_figure4b_tsnr-nativeviolin.py --fmriprep_dir /path/to/fmriprep_directory/ --tsnr_datadir /path/to/tsnr_prep_dir
 
-e.g.:
-python gen_figure4b_tsnr-nativeviolin.py --fmriprep_dir /media/umit/easystore/BangU01/fmriprep_21p0p2 --tsnr_datadir /media/umit/easystore/BangU01/tsnr_prep
-
 '''

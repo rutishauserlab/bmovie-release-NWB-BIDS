@@ -134,7 +134,4 @@ if __name__ == '__main__':
 '''
 python prepdata-isc-fsaverage.py --fmriprep_dir /path/to/fmriprep_directory/ --isc_outdir /path/to/isc_prepdata_directory/
 
-e.g.:
-python prepdata-isc-fsaverage.py --fmriprep_dir /media/umit/easystore/BangU01/fmriprep_21p0p2 --isc_outdir /media/umit/easystore/BangU01/iscdata
-
 '''

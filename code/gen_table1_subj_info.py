@@ -129,7 +129,4 @@ if __name__ == "__main__":
 run using:
 python gen_table1_subj_info.py --nwb_input_dir /path/to/nwb_files/ --bids_datadir /path/to/bids_files/
 
-e.g.: 
-python gen_table1_subj_info.py --nwb_input_dir /media/umit/easystore/bmovie_dandi/000623 --bids_datadir /media/umit/easystore/BangU01
-    
 '''

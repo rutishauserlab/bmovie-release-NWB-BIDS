@@ -117,7 +117,4 @@ if __name__ == '__main__':
 '''
 python compute-tsnr-fsaverage.py --fmriprep_dir /path/to/fmriprep_directory/ --output_dir /path/to/tsnr_prep_dir
 
-e.g.:
-python compute-tsnr-fsaverage.py --fmriprep_dir /media/umit/easystore/BangU01/fmriprep_21p0p2 --output_dir /media/umit/easystore/BangU01/tsnr_prep
-
 '''

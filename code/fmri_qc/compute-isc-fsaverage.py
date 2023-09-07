@@ -112,7 +112,4 @@ if __name__ == '__main__':
 '''
 python compute-isc-fsaverage.py --isc_datadir /path/to/isc_prepdata_directory/
 
-e.g.:
-python compute-isc-fsaverage.py --isc_datadir /media/umit/easystore/BangU01/iscdata
-
 '''

@@ -106,7 +106,4 @@ if __name__ == '__main__':
 '''
 python gen_figure4c_tsnr-fsaverage.py --tsnr_datadir /path/to/tsnr_prep_dir
 
-e.g.:
-python gen_figure4c_tsnr-fsaverage.py --tsnr_datadir /media/umit/easystore/BangU01/tsnr_prep
-
 '''
