@@ -92,8 +92,8 @@ def main(nwb_input_dir, lfp_process_dir, scenecuts_file):
     nwb_session_files = sorted(glob(os.path.join(nwb_input_dir, 'sub-*/*.nwb')))
         
     # Load scene cuts info
-    cuts_df_init = pd.read_csv('scenecut_info.csv')
-    cuts_df = cuts_df_init#.iloc[1:-1]
+    cuts_df_init = pd.read_csv(scenecuts_file)
+    cuts_df = cuts_df_init
     cuts_df.reset_index(drop=True, inplace=True)
     
     new_scenes = np.where(np.diff(cuts_df['scene_id']))[0] + 1
@@ -331,6 +331,6 @@ if __name__ == '__main__':
     
 
 '''
-python examine_channels_scenecuts.py --nwb_input_dir /path/to/nwb_files/ --lfp_process_dir /path/to/lfp_prep_dir --scenecuts_file /path/to/annotations/scenecut_info_file
+python examine_channels_scenecuts.py --nwb_input_dir /path/to/nwb_files/ --lfp_process_dir /path/to/lfp_prep_dir --scenecuts_file /path/to/scenecut_info.csv
 
 '''
