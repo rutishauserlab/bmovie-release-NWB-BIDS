@@ -34,7 +34,8 @@ def main(nwb_input_dir, bids_datadir):
     for session_ii in nwb_session_files:
         
         print(f'processing {os.path.basename(session_ii)}...')
-        with NWBHDF5IO(nwb_session_files,'r') as nwb_io: 
+
+        with NWBHDF5IO(session_ii,'r') as nwb_io: 
             # Read the NWB file
             nwbfile = nwb_io.read()
             
