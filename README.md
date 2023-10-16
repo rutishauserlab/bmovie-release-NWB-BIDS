@@ -26,7 +26,7 @@ The dataset is packaged in two standardized data formats: all data recorded whil
 
 - **NWB Files**: The NWB files are available from the Dandi Archive, under [Dandiset 000623](https://dandiarchive.org/dandiset/000623).
 
-- **BIDS Files**: The BIDS files are available from the OpenNeuro platform, under [dataset ds004798](https://doi.org/10.18112/openneuro.ds004798.v1.0.0). 
+- **BIDS Files**: The BIDS files are available from the OpenNeuro platform, under [dataset ds004798](https://openneuro.org/datasets/ds004798/). 
 
 See below for information on how to download the dataset from Dandi and OpenNeuro.
 
@@ -65,7 +65,7 @@ dandi download DANDI:000623
 ```
 
 #### BIDS Files:
-BIDS-formatted fMRI data can be downloaded from the [OpenNeuro, dataset ds004798](https://doi.org/10.18112/openneuro.ds004798.v1.0.0).
+BIDS-formatted fMRI data can be downloaded from the [OpenNeuro, dataset ds004798](https://openneuro.org/datasets/ds004798/).
 
 [DataLad](https://www.datalad.org/) can be used to download the files from OpenNeuro using the commands:
 ```bash
