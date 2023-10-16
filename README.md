@@ -26,7 +26,7 @@ The dataset is packaged in two standardized data formats: all data recorded whil
 
 - **NWB Files**: The NWB files are available from the Dandi Archive, under [Dandiset 000623](https://dandiarchive.org/dandiset/000623).
 
-- **BIDS Files**: The BIDS files are available from the OpenNeuro platform, under OpenNeuro #XYZ. 
+- **BIDS Files**: The BIDS files are available from the OpenNeuro platform, under [dataset ds004798](https://doi.org/10.18112/openneuro.ds004798.v1.0.0). 
 
 See below for information on how to download the dataset from Dandi and OpenNeuro.
 
