@@ -70,7 +70,7 @@ for ses_ii, session_ii in enumerate(session_ids):
     nwbfile = NWBFile(
         session_description = f'Movie watching and new/old recognition task for session: {session_ii}',
         identifier = session_ii,
-        session_id = session_ii.split('_')[1],
+        session_id = session_ii.replace('_', ''),
         session_start_time = session['date'], 
         experiment_description = 'The data contained within this file describe a movie watching and new/old recognition task performed in '+
                                  'patients with intractable epilepsy implanted with depth electrodes and Behnke-Fried '+

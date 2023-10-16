@@ -65,11 +65,11 @@ dandi download DANDI:000623
 ```
 
 #### BIDS Files:
-BIDS-formatted fMRI data can be downloaded from the [OpenNeuro, dataset #XYZ](TOBEADDED).
+BIDS-formatted fMRI data can be downloaded from the [OpenNeuro, dataset ds004798](https://doi.org/10.18112/openneuro.ds004798.v1.0.0).
 
 [DataLad](https://www.datalad.org/) can be used to download the files from OpenNeuro using the commands:
 ```bash
-datalad install https://github.com/OpenNeuroDatasets/[TOBEADDED]
+datalad install https://github.com/OpenNeuroDatasets/ds004798.git
 ```
 Please refer to the [DataLad handbook](http://handbook.datalad.org/en/latest/) about how to use DataLad.
 
