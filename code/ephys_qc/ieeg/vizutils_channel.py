@@ -125,9 +125,16 @@ def plot_psth(psth, t_trace, binsize, window=[-1,1], window2=None, figsize=(2,1.
     
     for ii in range(len(psth['data'])):
         if legends:
-            ax.plot(time_bins, psth['data'][ii]['mean'], '.-',
-                     color=colors[ii % len(colors)], lw=1.1, markersize=3,
-                     label=legends[ii])
+            # ax.plot(time_bins, psth['data'][ii]['mean'], '.-',
+                     # color=colors[ii % len(colors)], lw=1.1, markersize=3,
+                     # label=legends[ii])
+
+            ax.errorbar(time_bins, psth['data'][ii]['mean'], 
+                        yerr=psth['data'][ii]['sem'],
+                        color=colors[ii % len(colors)],
+                        fmt='.-', lw=1.1, markersize=3, 
+                        elinewidth=0.7, capthick=0.6, capsize=1.3,
+                        label=legends[ii])
         else:
             ax.plot(time_bins, psth['data'][ii]['mean'], '.-',
                      color=colors[ii % len(colors)], lw=1.1, markersize=3)

@@ -164,9 +164,16 @@ def plot_cellraster(spiketimes, binsize, window=[-1,1], window2=None, cut_line=N
     
     for ii in range(len(psth)):
         if legends:
-            ax2.plot(tbin_center, psth[ii]['mean'], '.-',
-                     color=colors[ii % len(colors)], lw=1.1, markersize=3,  
-                     label=legends[ii])
+            # ax2.plot(tbin_center, psth[ii]['mean'], '.-',
+                     # color=colors[ii % len(colors)], lw=1.1, markersize=3,  
+                     # label=legends[ii])
+
+            ax2.errorbar(tbin_center, psth[ii]['mean'], yerr=psth[ii]['sem'],
+                         color=colors[ii % len(colors)],
+                         fmt='.-', lw=1.1, markersize=3, 
+                         elinewidth=0.7, capthick=0.6, capsize=1.3,
+                         label=legends[ii])
+
         else:
             ax2.plot(tbin_center, psth[ii]['mean'], '.-',
                      color='#676767', lw=1.1, markersize=3)

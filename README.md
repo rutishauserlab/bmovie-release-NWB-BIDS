@@ -1,6 +1,6 @@
-# Multimodal brain responses during movie watching: single-neuron, intracranial EEG, and fMRI in human patients
+# Multimodal single-neuron, intracranial EEG, and fMRI brain responses during movie watching in human patients
 
-This repository contains Python scripts to accompany our data descriptor manuscript titled "Multimodal brain responses during movie watching: single-neuron, intracranial EEG, and fMRI in human patients". The code includes functionalities to read and plot data from NWB and BIDS files and perform various data validation analyses.
+This repository contains Python scripts to accompany our data descriptor paper titled "Multimodal single-neuron, intracranial EEG, and fMRI brain responses during movie watching in human patients". The code includes functionalities to read and plot data from NWB and BIDS files and perform various data validation analyses.
 
 ## Table of Contents
 - [Introduction](#introduction)
@@ -14,10 +14,11 @@ This repository contains Python scripts to accompany our data descriptor manuscr
 - [License](#license)
 
 ## Introduction
-This code accompanies the following data descriptor: [Citation Pending]. 
+This code accompanies the following data descriptor:
+* Keles, U., Dubois, J., Le, K.J.M., Tyszka, J.M., Kahn, D.A., Reed, C.M., Chung, J.M., Mamelak, A.N., Adolphs, R. and Rutishauser, U. Multimodal single-neuron, intracranial EEG, and fMRI brain responses during movie watching in human patients. Sci Data 11, 214 (2024). [Link to paper](https://doi.org/10.1038/s41597-024-03029-1)
 
-Abstract of the manuscript:
-> We present a multimodal dataset of intracranial recordings, fMRI, and eye tracking in 20 human participants. Intracranial recordings consist of single neurons, local field potential, and intracranial EEG activity recorded concurrently from depth electrodes targeting the amygdala, hippocampus, and medial frontal cortex while participants underwent intracranial monitoring for localization of epileptic seizures. Participants watched an 8-min long movie ("Bang You're Dead") and performed a recognition memory test for movie content. 3T fMRI activity was recorded prior to surgery in 11 of the same participants while performing the same task. This NWB- and BIDS-formatted dataset includes the spike times of all neurons, field potential activity, behavior, eye tracking, electrode locations, demographics, and functional and structural MRI scans. For technical validation, we provide signal quality metrics, assess eye tracking quality, behavior, the tuning of cells and high-frequency broadband power field potentials to familiarity and event boundaries, and show brain-wide inter-subject correlations. This dataset will facilitate the investigation of brain activity during movie watching, recognition memory, and the neural basis of the fMRI-BOLD signal.
+Abstract of the paper:
+> We present a multimodal dataset of intracranial recordings, fMRI, and eye tracking in 20 participants during movie watching. Recordings consist of single neurons, local field potential, and intracranial EEG activity acquired from depth electrodes targeting the amygdala, hippocampus, and medial frontal cortex implanted for monitoring of epileptic seizures. Participants watched an 8-min long excerpt from the video "Bang! You're Dead" and performed a recognition memory test for movie content. 3 T fMRI activity was recorded prior to surgery in 11 of these participants while performing the same task. This NWB- and BIDS-formatted dataset includes spike times, field potential activity, behavior, eye tracking, electrode locations, demographics, and functional and structural MRI scans. For technical validation, we provide signal quality metrics, assess eye tracking quality, behavior, the tuning of cells and high-frequency broadband power field potentials to familiarity and event boundaries, and show brain-wide inter-subject correlations for fMRI. This dataset will facilitate the investigation of brain activity during movie watching, recognition memory, and the neural basis of the fMRI-BOLD signal.
 
 ![Overview of data and experiment.](./assets/data_overview.png)
 
@@ -188,7 +189,7 @@ For further details on computations, input parameters, and output arguments, ple
 
 ## Reference
 If you use this code or the associated data, please cite:
-- Citation pending
+* Keles, U., Dubois, J., Le, K.J.M., Tyszka, J.M., Kahn, D.A., Reed, C.M., Chung, J.M., Mamelak, A.N., Adolphs, R. and Rutishauser, U. Multimodal single-neuron, intracranial EEG, and fMRI brain responses during movie watching in human patients. Sci Data 11, 214 (2024). [Link to paper](https://doi.org/10.1038/s41597-024-03029-1)
 
 ## Funding
 Acquisition of the associated data was supported by the NIMH Caltech Conte Center (P50MH094258 to R.A.), the BRAIN initiative through the National Institute of Neurological Disorders and Stroke (U01NS117839 to U.R.), and the Simons Collaboration on the Global Brain (542941 to R.A. and U.R.).
